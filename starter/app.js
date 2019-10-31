@@ -9,54 +9,44 @@ GAME RULES:
 
 */
 var scores, roundScore,activePlayer,gamePlaying,scoreset;
-var one,two;
 // if(document.getElementById('score').value !== null){
 // scoreset = document.getElementById('score').value;
 
-sayHi();
+//console.log(setscore);
+
 init();
 
 document.querySelector('.btn-roll').addEventListener('click', function btn(){
 if(gamePlaying){
         //1- Random Number
+    
     var dice = Math.floor(Math.random() *6)+1;
+
+    var dice_02 = Math.floor(Math.random() *6)+1;
        // var  dice = 6;
         //Displat the result
         
         var diceDOM = document.querySelector('.dice');
         diceDOM.style.display='block';
         diceDOM.src = 'dice-'+dice+'.png';
+
+        var diceDOM_02 = document.querySelector('.dice_02');
+        diceDOM_02.style.display='block';
+        diceDOM_02.src = 'dice-'+dice_02+'.png';
     
         //Update the round score IF the rolled number was NOt a 1
-        if(dice!==1){ //!== does not do type coersion
-            var i=0;
-            // //add Score
-        if(dice===6){
-            if(dice===6 && one ===6){
-                two=6;
-                  if(one===6 && two===6){
-                  roundScore=0;
-                    scores=0;
-                    nextPlayer();
-                 }
-    
-            }
-            one=6;
-            roundScore +=dice;
-            document.querySelector('#current-' + activePlayer).textContent=roundScore;
+        if(dice!==1 || dice_02!==1){ //!== does not do type coersion
            
-        }else{
-            one=0;
-            two=0;
-            roundScore +=dice;
-            document.querySelector('#current-' + activePlayer).textContent=roundScore;
-        }
-
-    }else{
-            //Next Player
-            nextPlayer();
-            }
-        }
+            // //add Score
+            roundScore+=dice+dice_02;
+            document.querySelector('#current-'+activePlayer).textContent=roundScore;
+        }else {
+                    //Next Player
+                    nextPlayer(); 
+        }      
+           
+    }
+        
     });
 
     document.querySelector('.btn-hold').addEventListener('click',function(){
@@ -66,10 +56,21 @@ if(gamePlaying){
 
         //Updat the UI
         document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
+        var input =document.querySelector('.final-score').value;
+
+        //unddefined,0,null or "
+        if(input){
+            var winningscore = input;
+        }else{
+            winningscore=100;
+        }
+        console.log(input);
          //Check if player won the game
-         if(scores[activePlayer]>=20){
+         if(scores[activePlayer]>=winningscore){
              document.querySelector('#name-'+activePlayer).textContent='Winner!!';
              document.querySelector('.dice').style.display='none';
+             document.querySelector('.dice_02').style.display='none';
+
              document.querySelector('.player-' + activePlayer+'-panel').classList.add('winner');
              document.querySelector('.player-' + activePlayer+'-panel').classList.remove('active');
             gamePlaying=false;
@@ -92,19 +93,13 @@ if(gamePlaying){
         document.getElementById('current-0').textContent = '0';
         //Change the active players
 
-        /*if(activePlayer === 0 ) {
-        document.querySelector('.player-1-panel').classList.remove('active');
-        document.querySelector('.player-0-panel').classList.add('active');
-        }else{
-            document.querySelector('.player-0-panel').classList.remove('active');
-        document.querySelector('.player-1-panel').classList.add('active'); 
-        */
-
        document.querySelector('.player-1-panel').classList.toggle('active');
        document.querySelector('.player-0-panel').classList.toggle('active');
             
        // Set the dice none again
        document.querySelector('.dice').style.display='none';
+       document.querySelector('.dice_02').style.display='none';
+
     }
 
     document.querySelector('.btn-new').addEventListener('click',init);
